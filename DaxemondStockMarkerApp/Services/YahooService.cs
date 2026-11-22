@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 
-namespace FunctionAppMovers.Services
+namespace DaxemondStockMarkerApp.Services
 {
     public interface IYahooService
     {

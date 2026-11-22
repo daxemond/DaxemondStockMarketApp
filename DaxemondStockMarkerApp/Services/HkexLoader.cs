@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using ClosedXML.Excel;
 
-namespace FunctionAppMovers.Services
+namespace DaxemondStockMarkerApp.Services
 {
     public interface IHkexLoader
     {

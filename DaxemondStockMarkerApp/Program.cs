@@ -1,12 +1,15 @@
 using DaxemondStockMarkerApp.Components;
 using DaxemondStockMarkerApp.Services;
-using FunctionAppMovers.Services;
+
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddApplicationInsightsTelemetry();
+builder.Services.AddApplicationInsightsTelemetry(options =>
+   {
+       options.ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"];
+   });
 builder.Services.AddSingleton<IMoverService, MoverService>();
 builder.Services.AddSingleton<IYahooService, YahooService>();
 builder.Services.AddSingleton<IHkexLoader, HkexLoader>();

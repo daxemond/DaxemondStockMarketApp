@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using FunctionAppMovers.Services;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.Extensions.Hosting;
@@ -26,28 +25,35 @@ namespace DaxemondStockMarkerApp.Services
             {
                 hour = int.Parse(x.Split(":")[0]),
                 min = int.Parse(x.Split(":")[1])
-            }).Select(x => new TimeSpan(x.hour,x.min,0)).ToArray();
+            }).Select(x => new TimeSpan(x.hour,x.min,0)).OrderBy(x => x).ToArray();
+
+            // set next time
+            var nowHk = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.Utc, _hkTz);
+            var next = GetNextRun(nowHk);
+            _logger.TrackTrace($"Watcher: Started, next run at {next} HKT", SeverityLevel.Information);
         } 
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                var nowHk = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.Utc, _hkTz);
-                var next = GetNextRun(nowHk);
-                var delay = next - nowHk;
-
-                _logger.TrackTrace($"Next run at {next} HKT (in {delay})",SeverityLevel.Information);
-
                 try
                 {
-                    await Task.Delay(delay, stoppingToken);
-                    await StartProcess();
-                    await Task.Delay(TimeSpan.FromSeconds(2), stoppingToken); // avoid double-fire
+                    var nowHk = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.Utc, _hkTz);
+                    var overhk = nowHk.AddSeconds(15);
+                    var next = GetNextRun(nowHk);
+                    //var delay = next - nowHk;
+                    if (overhk > next)
+                    {
+                        await StartProcess();
+                        _logger.TrackTrace($"Watcher: Next run at {next} HKT", SeverityLevel.Information);
+                        //_logger.TrackTrace($"Next run at {next} HKT (in {delay})", SeverityLevel.Information);
+                    }
+                    await Task.Delay(TimeSpan.FromSeconds(15), stoppingToken); // avoid double-fire
                 }
-                catch (OperationCanceledException)
+                catch (Exception ex)
                 {
-                    break;
+                    _logger.TrackException(ex);
                 }
             }
         }
@@ -66,7 +72,8 @@ namespace DaxemondStockMarkerApp.Services
         {
             try
             {
-                _logger.TrackTrace($"Starting process at {DateTime.Now}",SeverityLevel.Information);
+                var nowHk = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.Utc, _hkTz);
+                _logger.TrackTrace($"Watcher: Starting process at {nowHk} HKT",SeverityLevel.Information);
                 await _service.MainAsync();
             }
             catch (Exception ex)

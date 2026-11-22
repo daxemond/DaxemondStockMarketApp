@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace FunctionAppMovers.Services
+namespace DaxemondStockMarkerApp.Services
 {
     public interface IMoverService
     {
@@ -75,7 +75,7 @@ namespace FunctionAppMovers.Services
                 names = await _loader.LoadAsync();
                 _log.LogInformation("Loaded {Count} HKEX equities", names.Count);
                 var res = await _yahoo.CheckManyAsync(names.Keys);
-                _log.LogInformation("loading data...");
+                //_log.LogInformation("loading data...");
                 if (res.Count > 0)
                 {
                     // Ignore suspended / stale stocks: keep only those trading on the latest market date
@@ -121,7 +121,7 @@ namespace FunctionAppMovers.Services
                 parts.Add($"TOP {rises.Count} PRICE RISES (open vs yesterday close):\n" + string.Join("\n", Fmt(rises)));
 
             var report = string.Join("\n\n", parts);
-            _log.LogInformation("{Report}", parts.Count > 0 ? report : "No data.");
+            //_log.LogInformation("{Report}", parts.Count > 0 ? report : "No data.");
 
             if (parts.Count > 0)
             {

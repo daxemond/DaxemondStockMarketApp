@@ -2,6 +2,6 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ActiveDebugProfile>https</ActiveDebugProfile>
-    <NameOfLastUsedPublishProfile>C:\desmond\github\DaxemondStockMarketApp\DaxemondStockMarkerApp\Properties\PublishProfiles\daxemond-market-watcher - Zip Deploy.pubxml</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>C:\desmond\github\DaxemondStockMarketApp\DaxemondStockMarkerApp\Properties\PublishProfiles\daxemond-hk-watcher - Zip Deploy.pubxml</NameOfLastUsedPublishProfile>
   </PropertyGroup>
 </Project>
