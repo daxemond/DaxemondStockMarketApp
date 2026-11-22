@@ -17,7 +17,7 @@ namespace FunctionAppMovers.Services
             string[] needed = { "AZURE_TENANT_ID", "AZURE_CLIENT_ID", "AZURE_CLIENT_SECRET", "MAIL_SENDER" };
             var missing = needed.Where(k => string.IsNullOrEmpty(Environment.GetEnvironmentVariable(k))).ToList();
             if (missing.Count > 0)
-                throw new InvalidOperationException($"Missing environment variable(s): {string.Join(", ", missing)}");
+                throw new Exception($"Missing environment variable(s): {string.Join(", ", missing)}");
 
             var tenant = Environment.GetEnvironmentVariable("AZURE_TENANT_ID")!;
             var sender = Environment.GetEnvironmentVariable("MAIL_SENDER")!;
@@ -61,8 +61,7 @@ namespace FunctionAppMovers.Services
 
             var resp = await http.SendAsync(req);
             if ((int)resp.StatusCode != 202)
-                throw new InvalidOperationException(
-                    $"Graph sendMail failed: {(int)resp.StatusCode} {await resp.Content.ReadAsStringAsync()}");
+                throw new Exception($"Graph sendMail failed: {(int)resp.StatusCode} {await resp.Content.ReadAsStringAsync()}");
         }
     }
 }

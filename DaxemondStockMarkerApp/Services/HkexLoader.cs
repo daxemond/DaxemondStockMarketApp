@@ -28,7 +28,7 @@ namespace FunctionAppMovers.Services
             {
                 if (ws.Cell(r, 1).GetString().Trim() == "Stock Code") { hdrRow = r; break; }
             }
-            if (hdrRow < 0) throw new InvalidOperationException("Header row 'Stock Code' not found.");
+            if (hdrRow < 0) throw new Exception("Header row 'Stock Code' not found.");
 
             int lastCol = ws.Row(hdrRow).LastCellUsed()?.Address.ColumnNumber ?? 0;
             var cols = new Dictionary<string, int>();

@@ -1,6 +1,17 @@
 using DaxemondStockMarkerApp.Components;
+using DaxemondStockMarkerApp.Services;
+using FunctionAppMovers.Services;
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddApplicationInsightsTelemetry();
+builder.Services.AddSingleton<IMoverService, MoverService>();
+builder.Services.AddSingleton<IYahooService, YahooService>();
+builder.Services.AddSingleton<IHkexLoader, HkexLoader>();
+builder.Services.AddSingleton<IGraphMailer, GraphMailer>();
+builder.Services.AddHostedService<TaskWorkerService>();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
