@@ -6,3 +6,5 @@
 /DaxemondStockMarkerApp/bin/Debug/net10.0
 /DaxemondStockMarkerApp/obj
 /DaxemondStockMarkerApp/Properties
+/DaxemondStockMarkerApp/bin/Release/net10.0/appsettings.Development.json
+/DaxemondStockMarkerApp/bin/Release/net10.0/appsettings.json
